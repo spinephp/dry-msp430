@@ -37,7 +37,7 @@ void writeany(unsigned char com)
 {
 	LCD_en1();
 	P2OUT &=0xf0;//清低四位
-	P2OUT |=(com>>4)&0x0f;//写高四位
+	P2OUT |=(com>>4);//&0x0f;//写高四位
 	DelayNus(16);
 	LCD_en2();
 	LCD_en1();
@@ -49,7 +49,7 @@ void writeany(unsigned char com)
 //写指令
 void writecom(unsigned char com)
 {
-	DelayNus(16);
+	//DelayNus(16);
 	RS_0;
 	writeany(com);
 }
@@ -57,7 +57,7 @@ void writecom(unsigned char com)
 //写数据
 void writedata(unsigned char  dat)
 {
-	DelayNus(16);
+	//DelayNus(16);
 	RS_1;
 	writeany(dat);
 }
@@ -68,19 +68,19 @@ void lcdinit()
 	DelayNus(3000);
 	P2DIR |= BIT0|BIT1|BIT2|BIT3|BIT4|BIT5;
 	writecom(0x02); // 数据指针清零
-	DelayNus(1000);
+	//DelayNus(1000);
 	//writecom(0x28);
 	//DelayNus(1000);
 	//writecom(0x28);
 	//DelayNus(1000);
 	writecom(0x28);
-	DelayNus(1000);
+	//DelayNus(1000);
 	writecom(0x0c);
-	DelayNus(1000);
+	//DelayNus(1000);
 	writecom(0x01);
-	DelayNus(1000);
+	//DelayNus(1000);
 	writecom(0x06);
-	DelayNus(1000);
+	//DelayNus(1000);
 	//writecom(0x80);
 
 }
@@ -89,13 +89,9 @@ void lcdinit()
 //列x=0~15,行y=0,1
 void LCD_write_string(unsigned char x,unsigned char y,char *s)
 {
-	unsigned char address;  //写地址
-	address = (0x80 | (y<<6)) +x;
-	writecom( address);
-	_NOP();
+	writecom("\x80\xc0"[y] +x);
 	while (*s) // 显示字符
 	{
 		writedata( *s++ );
-		_NOP();
 	}
 }

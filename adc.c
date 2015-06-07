@@ -25,7 +25,7 @@ __interrupt void ADC10_ISR(void)
 	ADC10CTL0 &=~ADC10ON;
 	//ADC10CTL0 &= ~(ENC+ADC10SC);//使能转换并且开始转换
 	//ADC10CTL0&=~ADC10IFG;//清除中断标志位
-    unsigned int sum = 0,i = 0;
+    unsigned int sum = 0,i;
 	for(i=0;i<Num_of_Results;i++)
 	{
 		sum += IN_temper[i];                            //除以32求得平均值
